@@ -28,8 +28,14 @@ describe('AppointmentsDayView', () => {
     it('renders multiple appointments in an ol element', () => {
         const today = new Date();
         const appointments = [
-            { startsAt: today.setHours(12, 0) },
-            { startsAt: today.setHours(13, 0) }
+            {
+                startsAt: today.setHours(12, 0),
+                customer: { firstName: 'Ashley' }
+            },
+            {
+                startsAt: today.setHours(13, 0),
+                customer: { firstName: 'Jordan' }
+            }
         ];
         const {container} = render(<AppointmentsDayView appointments={appointments} />);
         expect(container.querySelector('ol')).not.toBeNull();
@@ -39,46 +45,49 @@ describe('AppointmentsDayView', () => {
     });
 });
 
-//describe('specify list items', () => {
-//    let container
-//    const today = new Date();
-//    const appointments = [
-//    {
-//      startsAt: today.setHours(12, 0),
-//      customer: { firstName: 'Ashley' }
-//    },
-//    {
-//      startsAt: today.setHours(13, 0),
-//      customer: { firstName: 'Jordan' }
-//    }
-//  ];
-
-//    beforeEach(() => {
-//        container = document.createElement('div');
-//    });
+describe('specify list items', () => {
+    let container
+    const today = new Date();
+    const appointments = [
+        {
+            startsAt: today.setHours(12, 0),
+            customer: { firstName: 'Ashley' }
+        },
+        {
+            startsAt: today.setHours(13, 0),
+            customer: { firstName: 'Jordan' }
+        }
+    ];
 
 
-//    const render = component => ReactDOM.render(component, container)
-
-//    it('initially shows a message saying there are no appointments today', () => {
-//        render(<AppointmentsDayView appointments={[]} />);
-//        expect(container.textContent).toMatch(
-//            'There are no appointments scheduled for today.'
-//        );
-//    });
-//    it('renders each appointment in an li', () => {
-//        render(<AppointmentsDayView appointments={appointments} />);
-//        expect(container.querySelectorAll('li')).toHaveLength(2);
-//        expect(
-//            container.querySelectorAll('li')[0].textContent
-//        ).toEqual('12:00');
-//        expect(
-//            container.querySelectorAll('li')[1].textContent
-//        ).toEqual('13:00');
-//    });
-//    //the first appt is ashley so it should appear by default
-//    it('selects the first appointment by default', () => {
-//        render(<AppointmentsDayView appointments={appointments} />);
-//        expect(container.textContent).toMatch('Ashley');
-//    });
-//});
+    it('initially shows a message saying there are no appointments today', () => {
+        const {container} = render(<AppointmentsDayView appointments={[]} />);
+        expect(container.textContent).toMatch(
+            'There are no appointments scheduled for today.'
+        );
+    });
+    it('renders each appointment in an li', () => {
+        const {container} = render(<AppointmentsDayView appointments={appointments} />);
+        expect(container.querySelectorAll('li')).toHaveLength(2);
+        expect(
+            container.querySelectorAll('li')[0].textContent
+        ).toEqual('12:00');
+        expect(
+            container.querySelectorAll('li')[1].textContent
+        ).toEqual('13:00');
+    });
+    //the first appt is ashley so it should appear by default
+    it('selects the first appointment by default', () => {
+        const {container} = render(<AppointmentsDayView appointments={appointments} />);
+        expect(container.textContent).toMatch('Ashley');
+    });
+    it('has a button element in each li', () => {
+        const {container} = render(<AppointmentsDayView appointments={appointments} />);
+        expect(
+            container.querySelectorAll('li > button')
+        ).toHaveLength(2);
+        expect(
+            container.querySelectorAll('li > button')[0].type
+        ).toEqual('button');
+    });
+});
